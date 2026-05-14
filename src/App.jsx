@@ -1,19 +1,42 @@
-import Navbar from './components/Navbar'
+import { Routes, Route } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import Livescore from './components/Livescore';
+import Navbar from './components/Navbar';
+import Signup from './components/auth/Signup';
+import Login from './components/auth/Login';
+import Loading from './components/Loading';
+import useAuth from './hooks/useAuth';
 
 function App() {
+  const { isAuthenticated } = useAuth();
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsReady(true);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!isReady) {
+    return <Loading />;
+  }
+
   return (
-    <>
-      <Navbar />
-      <main className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6">
-        <h1 className="text-balance text-4xl font-extrabold tracking-tight text-slate-100 sm:text-5xl">
-          StreetScore
-        </h1>
-        <p className="mt-3 max-w-2xl text-slate-300">
-          Live scores, match stats, and cricket updates in one place.
-        </p>
-      </main>
-    </>
-  )
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <>
+            <Navbar />
+            <Livescore />
+          </>
+        }
+      />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
+    </Routes>
+  );
 }
 
-export default App
+export default App;
