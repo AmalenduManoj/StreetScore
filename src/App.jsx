@@ -4,11 +4,10 @@ import Livescore from './components/Livescore';
 import Navbar from './components/Navbar';
 import Signup from './components/auth/Signup';
 import Login from './components/auth/Login';
+import Profile from './components/Profile';
 import Loading from './components/Loading';
-import useAuth from './hooks/useAuth';
 
 function App() {
-  const { isAuthenticated } = useAuth();
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -30,6 +29,15 @@ function App() {
           <>
             <Navbar />
             <Livescore />
+          </>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <>
+            <Navbar />
+            <Profile />
           </>
         }
       />

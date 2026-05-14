@@ -12,6 +12,7 @@ const links = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { isAuthenticated, logout, user } = useAuth();
+  const navLinks = isAuthenticated ? [...links, { label: 'Profile', href: '/profile' }] : links;
 
   return (
     <header className="sticky top-4 z-20 mx-4 md:mx-auto md:max-w-6xl">
@@ -55,7 +56,7 @@ export default function Navbar() {
           </button>
 
           <ul className="hidden items-center gap-5 md:flex">
-            {links.map((link) => (
+            {navLinks.map((link) => (
               <li key={link.label}>
                 <Link
                   className="text-md relative cursor-pointer font-medium text-[#454242] after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-green-500 after:transition-all after:duration-300 after:content-[''] hover:after:w-full"
@@ -69,14 +70,17 @@ export default function Navbar() {
 
           {isAuthenticated ? (
             <div className="hidden md:flex items-center gap-3">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 border border-gray-200">
+              <Link
+                to="/profile"
+                className="flex items-center gap-2 rounded-full border border-gray-200 bg-gray-100 px-4 py-2 transition-colors hover:bg-gray-200"
+              >
                 <div className="w-8 h-8 rounded-full bg-[#00a79d] flex items-center justify-center text-white text-sm font-bold">
                   {user?.email ? user.email.charAt(0).toUpperCase() : 'U'}
                 </div>
                 <span className="text-sm font-semibold text-gray-800 max-w-[120px] truncate">
                   {user?.email || 'User'}
                 </span>
-              </div>
+              </Link>
               <button
                 onClick={logout}
                 className="rounded-full border border-red-300/70 bg-red-50 hover:bg-red-100 px-4 py-2 text-sm font-semibold text-red-600 transition-colors duration-300"
@@ -112,7 +116,7 @@ export default function Navbar() {
         style={{ paddingTop: '104px', paddingBottom: '16px' }}
       >
         <ul className="flex min-h-0 flex-1 flex-col">
-          {links.map((link, index) => (
+          {navLinks.map((link, index) => (
             <li
               key={link.label}
               className={`group relative flex flex-1 flex-col justify-center px-5
@@ -143,7 +147,11 @@ export default function Navbar() {
         >
           {isAuthenticated ? (
             <div className="space-y-3">
-              <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gray-100 border border-gray-200">
+              <Link
+                to="/profile"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-3 rounded-lg border border-gray-200 bg-gray-100 px-4 py-3 transition-colors hover:bg-gray-200"
+              >
                 <div className="w-10 h-10 rounded-full bg-[#00a79d] flex items-center justify-center text-white font-bold">
                   {user?.email ? user.email.charAt(0).toUpperCase() : 'U'}
                 </div>
@@ -151,7 +159,7 @@ export default function Navbar() {
                   <p className="text-xs text-gray-500">Signed in as</p>
                   <p className="text-sm font-semibold text-gray-800 truncate">{user?.email || 'User'}</p>
                 </div>
-              </div>
+              </Link>
               <button
                 onClick={() => {
                   logout();
